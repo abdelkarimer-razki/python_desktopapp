@@ -58,11 +58,24 @@ def select_item(event):
 		entries[1].insert(0, item_data[2])
 		entries[2].insert(0, item_data[3])
 
+def on_key_release(event):
+	current_text = event.widget.get()
+	if current_text == '':
+		updateTable()
+	else:
+		data = ad.list
+		tree.delete(*tree.get_children())
+		for contact in data:
+			if (contact['nom'].startswith(current_text)):
+				values = (contact['id'],contact['nom'], contact['email'], contact['phone'])
+				tree.insert('', tk.END, values=values)
+
 
 
 # Adding a frame to the root window
 frm = ttk.Frame(root, padding=10)
 frm.grid()
+root.grid_columnconfigure(0, weight=1) 
 
 # Adding text Areas
 ttk.Label(frm, text="Nom complet").grid(column=0, row=0, sticky=tk.W)
@@ -82,14 +95,18 @@ ttk.Button(frm, text="Ajouter Contact", command=addcontact).grid(column=0, row=3
 ttk.Button(frm, text="Supprimer Contact", command=deletecontact).grid(column=1, row=3, pady=5)
 ttk.Button(frm, text="Modifier", command=modifier).grid(column=2, row=3, pady=5)
 
+ttk.Label(frm, text="Recherche par Nom:").grid(column=0, row=4,sticky=tk.W)
+entries.append(ttk.Entry(frm))
+entries[3].grid(row=5, column=0, sticky='we', padx=10, pady=10,columnspan="3")
+entries[3].bind("<KeyRelease>", on_key_release)
 
 # Adding the table of data
 columns = ('id','nom', 'email', 'phone')
 tree = ttk.Treeview(frm, columns=columns, show='headings')
 
-tree.heading('nom', text='First Name')
-tree.heading('email', text='Last Name')
-tree.heading('phone', text='Email')
+tree.heading('nom', text='Nom complet')
+tree.heading('email', text='E-mail')
+tree.heading('phone', text='Telephone')
 
 tree.column("id", width=0, minwidth=0, stretch=tk.NO)
 tree.column('nom', width=100, anchor=tk.W)
@@ -100,7 +117,7 @@ for contact in ad.list:
 	values = (contact['id'],contact['nom'], contact['email'], contact['phone'])
 	tree.insert('', tk.END, values=values)
 
-tree.grid(row=4,column=0, columnspan=3)
+tree.grid(row=6,column=0, columnspan=3)
 
 tree.bind("<<TreeviewSelect>>", select_item)
 root.mainloop()
