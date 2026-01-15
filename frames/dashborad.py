@@ -8,6 +8,7 @@ class dashboardFrame:
 	def __init__(self, root):
 		self.ad = AddressBook()
 		self.dashboard = ttk.Frame(root, padding=10)
+		self.root = root
 		self.entries = []
 		self.selectedId = None
 		self.tree = ttk.Treeview(self.dashboard, columns=('id','nom', 'email', 'phone', 'date', 'modify'), show='headings')
@@ -70,6 +71,7 @@ class dashboardFrame:
 
 	def build(self):
 		self.dashboard.grid()
+		self.root.title("Tableau de board")
 		# Adding text Areas
 		ttk.Label(self.dashboard, text="Nom complet").grid(column=0, row=0, sticky=tk.W)
 		ttk.Label(self.dashboard, text="E-mail").grid(column=0, row=1,sticky=tk.W)
