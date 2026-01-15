@@ -1,5 +1,6 @@
 from classes.contact import contact
 import json
+import datetime
 
 class AddressBook:
     def __init__(self):
@@ -41,6 +42,7 @@ class AddressBook:
                 contact['nom'] = nom
                 contact['email'] = email
                 contact['phone'] = phone
+                contact['lastTimeEdited'] = str(datetime.datetime.now())
         self.list = data
         with open(self.filename, "w") as file:
             json.dump(self.list, file, indent=4)
